@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body,html{height:100%;overflow:hidden;}
+
+.screen{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+.glass{
+  background:rgba(0,0,0,0.6);
+  padding:25px;
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  max-width:90%;
+}
+
+input{
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-top:15px;
+  width:220px;
+  text-align:center;
+}
+
+.eyeToggle{
+  position:absolute;
+  right:50px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#ff4da6;
+  font-weight:bold;
+}
+
+button{
+  padding:10px 20px;
+  margin-top:15px;
+  border:none;
+  border-radius:20px;
+  background:#ff4da6;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.error{
+  color:#ffb3b3;
+  margin-top:10px;
+  font-size:14px;
+}
+
+h1,h2{
+  font-size:28px;
+  text-shadow:0 0 15px hotpink;
+}
+
+/* SLIDESHOW TEXT */
+#slideText{
+  margin-top:20px;
+  padding:20px;
+  border-radius:20px;
+  background:linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+  font-size:18px;
+  line-height:1.6;
+  text-shadow:0 0 10px hotpink;
+  max-width:90%;
+  opacity:0;
+  transition:opacity 1.5s ease;
+}
+
+/* SLIDE WRAPPER */
+#slideWrapper{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  background-size: cover;
+  background-position: center;
+  transition:transform 6s ease;
+}
+
+/* HEARTS */
+.heart{
+  position:absolute;
+  width:15px;
+  height:15px;
+  background:rgba(255,105,180,0.8);
+  transform:rotate(45deg);
+  animation:floatUp 8s linear infinite;
+  opacity:0.7;
+}
+
+.heart:before,.heart:after{
+  content:"";
+  position:absolute;
+  width:15px;
+  height:15px;
+  background:rgba(255,105,180,0.8);
+  border-radius:50%;
+}
+
+.heart:before{top:-7px;left:0;}
+.heart:after{left:-7px;top:0;}
+
+@keyframes floatUp{
+  0%{transform:translateY(100vh) rotate(45deg);opacity:0;}
+  10%{opacity:0.8;}
+  100%{transform:translateY(-10vh) rotate(45deg);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music1" src="music1.mp3" loop></audio>
+<audio id="music2" src="music2.mp3" loop></audio>
+
+<!-- NAME -->
+<section id="password" class="screen" style="display:flex;background-image:url('bg1.jpg')">
+  <div class="glass" style="position:relative;">
+    <h2>Enter Your Name</h2>
+    <input type="password" id="passInput">
+    <span class="eyeToggle" onclick="toggleEye()">👁️</span>
+    <br>
+    <button onclick="checkPass()">Unlock</button>
+    <p id="passError" class="error"></p>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section id="q1" class="screen" style="background-image:url('bg2.jpg')">
+  <div class="glass">
+    <h2>Your BFF’s favourite person?</h2>
+    <input id="a1">
+    <br><button onclick="checkAnswer(1)">Next</button>
+    <p id="e1" class="error"></p>
+  </div>
+</section>
+
+<section id="q2" class="screen" style="background-image:url('bg2.jpg')">
+  <div class="glass">
+    <h2>Favourite dialogue of Ates?</h2>
+    <input id="a2">
+    <br><button onclick="checkAnswer(2)">Next</button>
+    <p id="e2" class="error"></p>
+  </div>
+</section>
+
+<section id="q3" class="screen" style="background-image:url('bg2.jpg')">
+  <div class="glass">
+    <h2>Your BFF’s BFF is?</h2>
+    <input id="a3">
+    <br><button onclick="checkAnswer(3)">Reveal</button>
+    <p id="e3" class="error"></p>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdown" class="screen" style="background-image:url('bg3.jpg')">
+  <div class="glass"><h1 id="countNum">5</h1></div>
+</section>
+
+<!-- BIRTHDAY -->
+<section id="birthday" class="screen" style="background-image:url('birthday.jpg')">
+  <div class="glass">
+    <h1 style="font-style:italic; text-align:center; font-size:32px;">💖 𝓗𝓐𝓟𝓟𝓨  𝓑𝓘𝓡𝓣𝓗𝓓𝓐𝓨 𝓹𝓻𝓲𝔂𝓪𝓷𝓼𝓱𝓲 💖</h1>
+    <p id="birthdayMsg" style="margin-top:20px; font-size:18px; line-height:1.6; text-align:center;"></p>
+  </div>
+</section>
+
+<!-- SLIDESHOW -->
+<section id="slideshow" class="screen">
+  <div id="heartsContainer"></div>
+  <div id="slideWrapper">
+    <h1 id="slideText"></h1>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section id="final" class="screen" style="background-image:url('bg4.jpg')">
+  <div class="glass">
+    <h1>💖Happy Birthday To swarg se utri Apsara💖</h1>
+    <p style="margin-top:15px;font-size:18px; line-height:1.6;">
+      I may not say it every day… but you truly mean a lot to me(bohot jyada).<br>
+      Life feels lighter, brighter and happier because you exist(ye jyada ho gya syt).<br>
+      Friendship like ours is rare and forever(100%💖real).<br>
+      Do u know what we are going to complete 2 years without meeting👀<br>
+      milna bhi nhi hai i am happy tumse dur rehke🥲<br>
+      Tap on Enjoy music, listen and ignore.<br>
+      ✨See You Soon ✨
+    </p>
+
+    <h1 style="margin-top:20px; font-size:28px; color:#ff4da6; text-align:center; text-shadow: 0 0 20px hotpink;">
+      🎵 ENJOY MUSIC, IGNORE 🎵
+    </h1>
+
+    <button id="playFinalMusic" style="margin-top:20px; padding:12px 25px; border:none; border-radius:25px; background:linear-gradient(45deg,#ff4e91,#ff9472); color:white; font-size:16px; cursor:pointer;">
+      Enjoy Music 🎵
+    </button>
+
+    <audio id="finalMusic" src="finalMusic.mp3" preload="auto"></audio>
+  </div>
+</section>
+
+<script>
+let music1 = document.getElementById("music1");
+let music2 = document.getElementById("music2");
+
+function toggleEye(){
+  let inp = document.getElementById("passInput");
+  inp.type = inp.type === "password" ? "text" : "password";
+}
+
+function checkPass(){
+  let val = document.getElementById("passInput").value.toLowerCase().trim();
+  if(val === "priyanshi"){
+    music1.play();
+    document.getElementById("password").style.display = "none";
+    document.getElementById("q1").style.display = "flex";
+  } else {
+    document.getElementById("passError").innerHTML = "kya hoga tumhara😅";
+  }
+}
+
+function checkAnswer(num){
+  let answers = {
+    1: ["virat kohli"],
+    2: ["my wife"],
+    3: ["me"]
+  };
+  let input = document.getElementById("a"+num).value.toLowerCase().trim();
+  if(answers[num].includes(input)){
+    document.getElementById("q"+num).style.display = "none";
+    if(num < 3){
+      document.getElementById("q"+(num+1)).style.display = "flex";
+    } else {
+      startCountdown();
+    }
+  } else {
+    document.getElementById("e"+num).innerHTML = "Tum se yeh bhi nhi hua 😜";
+  }
+}
+
+function startCountdown(){
+  let screen = document.getElementById("countdown");
+  screen.style.display = "flex";
+  let count = 5;
+  let interval = setInterval(()=>{
+    count--;
+    document.getElementById("countNum").innerHTML = count;
+    if(count == 0){
+      clearInterval(interval);
+      screen.style.display = "none";
+      showBirthday();
+    }
+  },1000);
+}
+
+function showBirthday(){
+  let screen = document.getElementById("birthday");
+  let text = document.getElementById("birthdayMsg");
+  screen.style.display = "flex";
+  let msg = `Dear Best friend,
+
+Even though miles lie between us, I feel you close in every memory, every laugh, every little moment we shared. Distance can’t touch the bond we have — it only makes me treasure it more.
+
+I wish you all the happiness, success, and love in the world. Keep shining, keep smiling, and never forget that I’m always cheering for you from afar. One day soon, we’ll make more memories together, just like old times.
+
+(kya kya likhna padhta hai friendship 😜 ke chakar me)
+
+Forever your friend-priyanshu😜`
+  let i=0;
+  let typing = setInterval(()=>{
+    if(msg[i]==="\n"){ text.innerHTML+="<br>"; }
+    else{ text.innerHTML+=msg[i]; }
+    i++;
+    if(i>=msg.length){
+      clearInterval(typing);
+      setTimeout(()=>{
+        screen.style.display="none";
+        startSlideshow();
+      },4000);
+    }
+  },40);
+}
+
+let slides = [
+  {img:"photo1.jpg",text:"Many Many Happy Returns of the Day! 💖 May This Year Bring Endless Happiness."},
+  {img:"photo2.jpg",text:"You Are Rare(rare means your are the only dump person on earth), Precious And Truly One of a kind Girl."},
+  {img:"photo3.jpg",text:"Your Beauty Shines From Your Heart💕. You Are Naturally Pretty ✨ and Graceful ✨"},
+  {img:"photo4.jpg",text:"Best of Luck For Your Exams! 📚 I know You will Achieve Everything In Your Life."},
+  {img:"photo5.jpg",text:"You Will always be Special to Me. 💕 You are MY BESTEST FRIEND FOREVER."}
+];
+
+function createHearts(){
+  let container = document.getElementById("heartsContainer");
+  setInterval(()=>{
+    let heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.animationDuration = (6+Math.random()*4)+"s";
+    container.appendChild(heart);
+    setTimeout(()=>{heart.remove();},8000);
+  },500);
+}
+
+function startSlideshow(){
+  music1.pause();
+  music2.play();
+  createHearts();
+  let show = document.getElementById("slideshow");
+  let text = document.getElementById("slideText");
+  let wrapper = document.getElementById("slideWrapper");
+  show.style.display = "flex";
+  let i=0;
+
+  function showSlide(){
+    wrapper.style.backgroundImage = `url('${slides[i].img}')`;
+    wrapper.style.transform = "scale(1)";
+    setTimeout(()=>{wrapper.style.transform="scale(1.05)";},200);
+    text.style.opacity = 0;
+    setTimeout(()=>{
+      text.innerHTML = slides[i].text;
+      text.style.opacity = 1;
+    },600);
+  }
+
+  showSlide();
+  let interval = setInterval(()=>{
+    i++;
+    if(i>=slides.length){
+      clearInterval(interval);
+      setTimeout(()=>{
+        show.style.display="none";
+
+        // ✅ Show final page & auto-play final music
+        let finalScreen = document.getElementById("final");
+        let finalMusic = document.getElementById("finalMusic");
+        let playButton = document.getElementById("playFinalMusic");
+
+        finalScreen.style.display = "flex";
+
+        // Stop slideshow music
+        music2.pause();
+        music2.currentTime = 0;
+
+        // Auto-play final music
+        finalMusic.play().catch(err => {
+            console.log("User interaction needed to play audio:", err);
+        });
+
+        // Manual play button
+        playButton.onclick = function(){
+            finalMusic.play();
+        };
+
+      },5000);
+      return;
+    }
+    showSlide();
+  },5000);
+}
+</script>
+
+</body>
+</html>
